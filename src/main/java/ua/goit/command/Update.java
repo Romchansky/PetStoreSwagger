@@ -9,7 +9,6 @@ import ua.goit.service.UserService;
 import ua.goit.view.View;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Update extends AbstractCommand implements Command {
     private static final String MENU = """
@@ -58,18 +57,14 @@ public class Update extends AbstractCommand implements Command {
 
     private void updatePet() {
         int id = readIntegerFromConsole("Enter pet id you would like to update");
-        try {
-            Pet petToUpdate = PetService.getPetById(id);
-            view.write("Enter pet new name");
-            String newName = view.read();
-            PetStatus newStatus = readPetStatusFromConsole();
-            petToUpdate.setName(newName);
-            petToUpdate.setStatus(newStatus);
-            ApiResponse apiResponse = PetService.updatePet(id, petToUpdate);
-            resultOutput(apiResponse);
-        } catch (IOException | InterruptedException ex) {
-            view.write(ex.getMessage());
-        }
+        Pet petToUpdate = PetService.getPetById(id);
+        view.write("Enter pet new name");
+        String newName = view.read();
+        PetStatus newStatus = readPetStatusFromConsole();
+        petToUpdate.setName(newName);
+        petToUpdate.setStatus(newStatus);
+        ApiResponse apiResponse = PetService.updatePet(id, petToUpdate);
+        resultOutput(apiResponse);
     }
 
     private void addPhotos() {
@@ -77,11 +72,7 @@ public class Update extends AbstractCommand implements Command {
         view.write("Enter description to photo");
         String metaData = view.read();
         File image = readFileFromConsole();
-        try {
-            ApiResponse apiResponse = PetService.uploadImage(id, metaData, image);
-            resultOutput(apiResponse);
-        } catch (IOException | InterruptedException ex) {
-            view.write(ex.getMessage());
-        }
+        ApiResponse apiResponse = PetService.uploadImage(id, metaData, image);
+        resultOutput(apiResponse);
     }
 }
